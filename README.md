@@ -36,5 +36,5 @@
 
 ### 3、参考
 
-[1. ODB](https://www.codesynthesis.com/products/odb/download.xhtml "ODB")<br>
-[2. GDAL](https://github.com/OSGeo/gdal "GDAL")
+[1. ODB 官网链接](https://www.codesynthesis.com/products/odb/download.xhtml "ODB")<br>
+[2. GDAL GitHub 源码链接](https://github.com/OSGeo/gdal "GDAL")
