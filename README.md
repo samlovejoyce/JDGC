@@ -31,3 +31,12 @@
 #### 6）二维AR模型数据生成
 
 #### 7）CRG格式文件输出
+
+
+
+### 3、参考
+
+[ODB](https://www.codesynthesis.com/products/odb/download.xhtml "ODB")
+[GDAL](https://github.com/OSGeo/gdal "GDAL")
+
+        
