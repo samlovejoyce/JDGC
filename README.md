@@ -2,7 +2,7 @@
 =============================================================
 ## JDGC
 
-### 1、[*ImageDataProcess*](/about/master/projcect/ImageDataProcess)项目功能：
+### 1、*ImageDataProcess*项目功能：
     项目简介：
     tif格式图片数据处理
       读取tif格式图片数据，然后将读到的数据以图像块的大小存入数据库，
@@ -19,7 +19,7 @@
 
 
 
-### 2、[*TerrainDataProcess*](/about/master/projcect/TerrainDataProcess)项目功能：
+### 2、*TerrainDataProcess*项目功能：
     简介：
     
     
