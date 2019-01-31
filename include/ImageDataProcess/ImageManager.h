@@ -2,12 +2,12 @@
 #define IMAGEMANAGER_H
 
 #include "../common/Export.h"
+#include "ImageDataProcess.h"
 
 #include <memory>	// std::auto_ptr
 
 #include <odb/database.hxx>
 #include <odb/transaction.hxx>
-
 #include <odb/mysql/database.hxx>
 
 #include "real_terrain.hxx"
@@ -20,21 +20,24 @@ namespace JDGC {
 		ImageManager();
 		~ImageManager();
 
+		/** 设置当前要是用的图片的路径 */
 		void setImagePath(std::string path);
 
-		void readImage();
+		/** 载入图片 */
+		bool loadImage(std::string path);
+		
+		/** 图片数据访问 */
+		void readImageData();
 
+		/** 图片数据存储 */
 		void storeData(float *pdata, int xno, int yno, int xsize, int ysize);
 
 		std::vector<float> getDataBlock(float x, float y);
 
 		float getPointHeight(float x, float y);
 
-		bool isConnect() { return _isConnect; }
-
 	private:
-		bool _isConnect;
-
+		ImageProcess *_pImageProcess;
 		std::string curImagePath;
 
 		std::auto_ptr<odb::database> db;

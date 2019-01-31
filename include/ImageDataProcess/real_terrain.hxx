@@ -33,6 +33,7 @@ public:
 		yblocksize = ysize;
 		zdata.swap(data);
 	}
+	buffer getZData() { return zdata; }
 
 private:
 	real_terrain() {}			// 3 

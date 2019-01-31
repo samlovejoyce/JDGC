@@ -95,4 +95,13 @@ const char* crgDataFiledName[] =
 /** openCRG的MATLAB库所在文件 */
 #define CRG_MATLAB_LIB_PATH "..\\..\\3rd\\OpenCRG.1.1.2\\matlab"
 
+
+/**
+ * TIF地形高程图片的UTM投影坐标范围
+ */
+#define TIF_PROJCOORDINATE_TOP 4012092.780
+#define TIF_PROJCOORDINATE_LEFT 678840.900
+#define TIF_PROJCOORDINATE_RIGHT 679193.070
+#define TIF_PROJCOORDINATE_BOTTOM 4011029.950
+
 #endif // !COMMON_H

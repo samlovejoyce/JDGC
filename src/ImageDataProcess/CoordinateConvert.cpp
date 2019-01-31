@@ -23,12 +23,15 @@ namespace JDGC {
 	{
 		_pUVCoordinate = new UVCoordinate;
 		_pXYCoordinate = new XYCoordinate;
+		_pPCRegion = new ProjectionCoordinateRegion;
 	}
 	CoordinateConvert::~CoordinateConvert()
 	{
 		delete _pUVCoordinate;
 		delete _pXYCoordinate;
+		delete _pPCRegion;
 	}
+
 	void CoordinateConvert::convertXYToUV(double x, double y, int &u, int &v)
 	{
 		double x1 = x / _pXYCoordinate->xLength;
@@ -42,6 +45,7 @@ namespace JDGC {
 	{
 
 	}
+	
 	void CoordinateConvert::initUVCoordinate(UVCoordinate uv)
 	{
 		_pUVCoordinate->uLength = uv.uLength;
@@ -70,5 +74,27 @@ namespace JDGC {
 		_pXYCoordinate->yLength = pxy->yLength;
 		_pXYCoordinate->u0 = pxy->u0;
 		_pXYCoordinate->v0 = pxy->v0;
+	}
+	
+	void CoordinateConvert::initProjectionCoordinateRegion(ProjectionCoordinateRegion region)
+	{
+		_pPCRegion->top = region.top;
+		_pPCRegion->left = region.left;
+		_pPCRegion->right = region.right;
+		_pPCRegion->bottom = region.bottom;
+	}
+	void CoordinateConvert::initProjectionCoordinateRegion(ProjectionCoordinateRegion * pregion)
+	{
+		_pPCRegion->top = pregion->top;
+		_pPCRegion->left = pregion->left;
+		_pPCRegion->right = pregion->right;
+		_pPCRegion->bottom = pregion->bottom;
+	}
+	bool CoordinateConvert::isInRegion(float lat, float lon)
+	{
+		if (lat <= _pPCRegion->left && lat >= _pPCRegion->right &&
+			lon <= _pPCRegion->top && lon >= _pPCRegion->bottom)
+			return true;
+		return false;
 	}
 }

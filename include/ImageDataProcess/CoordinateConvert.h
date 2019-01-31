@@ -19,6 +19,13 @@ namespace JDGC {
 		int v0;
 	};
 
+	struct ProjectionCoordinateRegion {
+		float top;
+		float left;
+		float right;
+		float bottom;
+	};
+
 	class JDCG_EXPORT_API CoordinateConvert
 	{
 	public:
@@ -33,11 +40,16 @@ namespace JDGC {
 		
 		void initXYCoordinate(XYCoordinate xy);
 		void initXYCoordinate(XYCoordinate* pxy);
+		
+		void initProjectionCoordinateRegion(ProjectionCoordinateRegion region);
+		void initProjectionCoordinateRegion(ProjectionCoordinateRegion *pregion);
 
+		bool isInRegion(float lat, float lon);
 	private:
 
 		UVCoordinate *_pUVCoordinate;
 		XYCoordinate *_pXYCoordinate;
+		ProjectionCoordinateRegion *_pPCRegion;
 	};
 }
 #endif // !COORDINATECONVERT_H

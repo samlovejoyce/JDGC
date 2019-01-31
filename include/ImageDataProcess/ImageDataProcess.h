@@ -19,6 +19,8 @@ namespace JDGC {
 		int getImageWidth();
 		int getImageHeight();
 
+		void initImageData();
+
 		const char* getProjectionInfo();
 
 		/** 获取当前波段的波段大小 */
@@ -31,12 +33,18 @@ namespace JDGC {
 
 		void calculateCurBandBlocksNo(GDALRasterBand *poBand);
 
-		void *getBlockData(GDALRasterBand *poBand, int nXBlockNo, int nYBlockNo, int *realXBlockSize, int *realYBlockSize);
+		void *getBlockData(GDALRasterBand *poBand, int nXBlockNo, int nYBlockNo, int &realXBlockSize, int &realYBlockSize);
 
 		GDALRasterBand *getCurRasterBand(GDALDataset *poDataset, int index);
 		GDALDataset *getDataset() { return _poDataset; }
-	private:
+
 		void gdalConvertUTMToWGS84(GDALDataset *poDataset, double x, double y);
+
+		/** 根据UTM投影坐标转换图片的UV坐标 */
+		void convertUTM2UV(double x, double y, int &nx, int &ny);
+
+		/** 根据UV坐标转换图片的UTM投影坐标 */
+		void convertUV2UTM(int nx, int ny, double &x, double &y);
 
 	private:
 		GDALDataset *_poDataset;
@@ -56,6 +64,7 @@ namespace JDGC {
 		int _nRasterBandCount; /** 图像波段总数 */
 
 		float *fBlockData;
+		double padfTransform[6];
 	};
 }
 #endif // !IMAGEPROCESS_H

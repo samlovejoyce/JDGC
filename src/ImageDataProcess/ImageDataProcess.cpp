@@ -85,6 +85,21 @@ namespace JDGC
 
 	/************************************************************************************
 	* Copyright (c) year All Rights Reserved.
+	* 命名空间：rootnamespace 
+	* 创建人： 0XFFFFFFFF
+	* 创建时间：2019/01/30
+	* 功能描述:
+	************************************************************************************/
+	void ImageProcess::initImageData()
+	{
+		getImageWidth();
+		getImageHeight();
+
+		_poDataset->GetGeoTransform(padfTransform);
+	}
+
+	/************************************************************************************
+	* Copyright (c) year All Rights Reserved.
 	* 命名空间：rootnamespace
 	* 创建人： 0XFFFFFFFF
 	* 创建时间：2019/01/11
@@ -128,8 +143,6 @@ namespace JDGC
 		if (poBand)
 		{
 			setCurBandBlockSize(poBand);
-			//int nXBlocks = (poBand->GetXSize() + nXBlockSize - 1) / nXBlockSize;
-			//int nYBlocks = (poBand->GetYSize() + nYBlockSize - 1) / nYBlockSize;
 			_nXBlocksNo = (_nImageXSize + _nXBlockSize - 1) / _nXBlockSize;
 			_nYBlocksNo = (_nImageYSize + _nYBlockSize - 1) / _nYBlockSize;
 		}
@@ -147,51 +160,40 @@ namespace JDGC
 	* 创建时间：2019/01/17
 	* 功能描述: 获取波段的第(nXBolockNo， nYBolockNo)块的数据
 	************************************************************************************/
-	void * ImageProcess::getBlockData(GDALRasterBand * poBand, int nXBlockNo, int nYBlockNo, int *realXBlockSize, int *realYBlockSize)
+	void * ImageProcess::getBlockData(GDALRasterBand * poBand, int nXBlockNo, int nYBlockNo, int &realXBlockSize, int &realYBlockSize)
 	{
 		if (!poBand)
 			return nullptr;
-
-		int nRealXBlockSize, nRealYBlockSize;
-
-		/** 计算序号块的实际图片大小 */
-		//nRealXBlockSize = ((_nImageXSize - (nXBlockNo + 1) * _nXBlockSize) > 0) ? _nXBlockSize : (_nImageXSize - nXBlockNo * _nXBlockSize);
-		//nRealYBlockSize = ((_nImageYSize - (nYBlockNo + 1) * _nYBlockSize) > 0) ? _nYBlockSize : (_nImageYSize - nYBlockNo * _nYBlockSize);
-
-		/** 申请对应的数据空间 */
-		//float *blockData = nullptr;
+		
 		GDALDataType eDataType = poBand->GetRasterDataType();
 		if (eDataType == GDT_Float32)
 		{
+			//Compute the portion of the block that is valid for partial edge blocks.
+			poBand->GetActualBlockSize(nXBlockNo, nYBlockNo, &realXBlockSize, &realYBlockSize);
 			if (fBlockData)
 				delete fBlockData;
-			fBlockData = new float[_nXBlockSize * _nYBlockSize];
-			//blockData = new float[_nXBlockSize * _nYBlockSize];
+
+			/** 申请对应的数据空间 */
+			fBlockData = new float[realXBlockSize * realYBlockSize];
 			/** 将数据存放到内存中 */
 			poBand->ReadBlock(nXBlockNo, nYBlockNo, fBlockData);
 
-			//Compute the portion of the block that is valid for partial edge blocks.
-			poBand->GetActualBlockSize(nXBlockNo, nYBlockNo, &nRealXBlockSize, &nRealYBlockSize);			
-
 			/** 对数据进行有效性处理 */
-			for (int iY = 0; iY < nRealYBlockSize; iY++)
+			for (int iY = 0; iY < realYBlockSize; iY++)
 			{
-				for (int iX = 0; iX < nRealXBlockSize; iX++)
+				for (int iX = 0; iX < realXBlockSize; iX++)
 				{
-					if ((fBlockData[iX + iY* nRealXBlockSize]) > 1000)
+					if ((fBlockData[iX + iY* realXBlockSize]) > 1000)
 					{
-						fBlockData[iX + iY* nRealXBlockSize] = 0.0;
+						fBlockData[iX + iY* realXBlockSize] = 0.0;
 					}
-					else if ((fBlockData[iX + iY* nRealXBlockSize]) < -100.0)
+					else if ((fBlockData[iX + iY* realXBlockSize]) < -100.0)
 					{
-						fBlockData[iX + iY* nRealXBlockSize] = 0.0;
+						fBlockData[iX + iY* realXBlockSize] = 0.0;
 					}
 				}
 			}
 		}
-
-		*realXBlockSize = nRealXBlockSize;
-		*realYBlockSize = nRealYBlockSize;
 		return fBlockData;
 	}
 
@@ -233,4 +235,42 @@ namespace JDGC
 		coordTrans->Transform(1, &lat, &lon);
 	}
 
+	/************************************************************************************
+	* Copyright (c) 2019 All Rights Reserved.
+	* 命名空间：JDGC
+	* 创建人  ：sharperm@163.com
+	* 创建时间：2019/01/30
+	* 功能描述: 根据UTM投影坐标转换图像UV坐标
+	************************************************************************************/
+	void ImageProcess::convertUTM2UV(double x, double y, int & nx, int & ny)
+	{
+		double tempx = ((x - padfTransform[0]) * padfTransform[4] - (y - padfTransform[3]) * padfTransform[1]) /
+			(padfTransform[2] * padfTransform[4] - padfTransform[1] * padfTransform[5]);
+		double tempy = ((x - padfTransform[0]) * padfTransform[5] - (y - padfTransform[3]) * padfTransform[2]) /
+			(padfTransform[1] * padfTransform[5] - padfTransform[4] * padfTransform[2]);
+
+		if ((tempx - floor(tempx)) < 0.5)
+			x = floor(tempx);
+		else
+			x = ceil(tempx);
+
+		if ((tempy - floor(tempy)) < 0.5)
+			y = floor(tempy);
+		else
+			y = ceil(tempy);
+
+	}
+
+	/************************************************************************************
+	* Copyright (c) 2019 All Rights Reserved.
+	* 命名空间：JDGC
+	* 创建人  ：sharperm@163.com
+	* 创建时间：2019/01/30
+	* 功能描述: 根据UV坐标转换图片的UTM投影坐标
+	************************************************************************************/
+	void ImageProcess::convertUV2UTM(int nx, int ny, double & x, double & y)
+	{
+		x = padfTransform[0] + nx * padfTransform[1] + ny * padfTransform[2];
+		y = padfTransform[3] + nx * padfTransform[4] + ny * padfTransform[5];
+	}
 }
