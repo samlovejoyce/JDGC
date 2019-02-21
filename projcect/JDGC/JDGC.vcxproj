@@ -74,10 +74,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageProcess;D:\SharperM\JDGC\3rd;D:\mysql-5.7.24-winx64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\SharperM\JDGC\lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageDataProcess;D:\SharperM\JDGC\3rd;D:\SharperM\JDGC\3rd\OSGeo\gdal\include;$(MYSQL_PATH)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\SharperM\JDGC\3rd\OSGeo\gdal\lib;D:\SharperM\JDGC\lib\$(Configuration)\;$(MYSQL_PATH)\lib;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <IntDir>..\..\temp\$(Configuration)\</IntDir>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -86,8 +87,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <IntDir>..\..\temp\$(Configuration)\</IntDir>
-    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageProcess;D:\SharperM\JDGC\3rd;D:\mysql-5.7.24-winx64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\SharperM\JDGC\lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageDataProcess;D:\SharperM\JDGC\3rd;D:\SharperM\JDGC\3rd\OSGeo\gdal\include;$(MYSQL_PATH)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\SharperM\JDGC\lib\$(Configuration)\;D:\SharperM\JDGC\3rd\OSGeo\gdal\lib;$(MYSQL_PATH)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,7 +116,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ImageProcessd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ImageDataProcessd.lib;libmysql.lib;gdal_i.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,7 +154,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ImageProcess.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ImageDataProcess.lib;libmysql.lib;gdal_i.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

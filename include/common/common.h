@@ -8,7 +8,7 @@
 #define DB_USER_NAME "root"
 #define DB_PASSWORD "123456"
 #define DB_PORT 3306
-#define DB_NAME "terrain_db"
+#define DB_DATABASE_NAME "terraindb"
 #define DB_SOCKET_NAME nullptr
 #define DB_FLAG 0
 

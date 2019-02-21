@@ -7,11 +7,11 @@
 #include "FileManeger.h"
 
 namespace JDGC {
-	class JDCG_EXPORT_API ImageProcess
+	class JDCG_EXPORT_API ImageDataProcess
 	{
 	public:
-		ImageProcess();
-		~ImageProcess();
+		ImageDataProcess();
+		~ImageDataProcess();
 
 		bool openFile(std::string file);
 
@@ -33,7 +33,7 @@ namespace JDGC {
 
 		void calculateCurBandBlocksNo(GDALRasterBand *poBand);
 
-		void *getBlockData(GDALRasterBand *poBand, int nXBlockNo, int nYBlockNo, int &realXBlockSize, int &realYBlockSize);
+		float *getBlockData(GDALRasterBand *poBand, int nXBlockNo, int nYBlockNo, int &realXBlockSize, int &realYBlockSize);
 
 		GDALRasterBand *getCurRasterBand(GDALDataset *poDataset, int index);
 		GDALDataset *getDataset() { return _poDataset; }
@@ -45,6 +45,8 @@ namespace JDGC {
 
 		/** 根据UV坐标转换图片的UTM投影坐标 */
 		void convertUV2UTM(int nx, int ny, double &x, double &y);
+
+		void releaseMemory();
 
 	private:
 		GDALDataset *_poDataset;
@@ -63,7 +65,7 @@ namespace JDGC {
 
 		int _nRasterBandCount; /** 图像波段总数 */
 
-		float *fBlockData;
+		float *fBlockData = nullptr;
 		double padfTransform[6];
 	};
 }

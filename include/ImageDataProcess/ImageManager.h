@@ -3,15 +3,16 @@
 
 #include "../common/Export.h"
 #include "ImageDataProcess.h"
+#include "DataBaseInterface.h"
 
 #include <memory>	// std::auto_ptr
 
-#include <odb/database.hxx>
-#include <odb/transaction.hxx>
-#include <odb/mysql/database.hxx>
-
-#include "real_terrain.hxx"
-#include "real_terrain-odb.hxx"
+//#include <odb/database.hxx>
+//#include <odb/transaction.hxx>
+//#include <odb/mysql/database.hxx>
+//
+//#include "real_terrain.hxx"
+//#include "real_terrain-odb.hxx"
 
 namespace JDGC {
 	class JDCG_EXPORT_API ImageManager
@@ -29,18 +30,11 @@ namespace JDGC {
 		/** 图片数据访问 */
 		void readImageData();
 
-		/** 图片数据存储 */
-		void storeData(float *pdata, int xno, int yno, int xsize, int ysize);
-
-		std::vector<float> getDataBlock(float x, float y);
-
-		float getPointHeight(float x, float y);
-
 	private:
-		ImageProcess *_pImageProcess;
+		ImageDataProcess *_pImageProcess;
 		std::string curImagePath;
 
-		std::auto_ptr<odb::database> db;
+		DataBaseInterface *_db;
 	};
 }
 

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\ImageDataProcess\blob-traits.hxx">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\ImageDataProcess\CoordinateConvert.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -30,10 +27,10 @@
     <ClInclude Include="..\..\include\ImageDataProcess\ImageDataProcess.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\ImageDataProcess\real_terrain-odb.hxx">
+    <ClInclude Include="..\..\include\ImageDataProcess\DatabaseException.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\ImageDataProcess\real_terrain.hxx">
+    <ClInclude Include="..\..\include\ImageDataProcess\DataBaseInterface.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,11 +47,11 @@
     <ClCompile Include="..\..\src\ImageDataProcess\ImageDataProcess.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ImageDataProcess\real_terrain-odb.cxx">
+    <ClCompile Include="..\..\src\ImageDataProcess\DatabaseException.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\include\ImageDataProcess\real_terrain-odb.ixx" />
+    <ClCompile Include="..\..\src\ImageDataProcess\DataBaseInterface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

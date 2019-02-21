@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JDGC", "projcect\JDGC\JDGC.vcxproj", "{8620BDE4-CE97-4508-B3D5-B2A28B6A5463}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E64A5196-D29C-4412-8A29-72F1AD418A30} = {E64A5196-D29C-4412-8A29-72F1AD418A30}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TerrainDataProcess", "projcect\TerrainDataProcess\TerrainDataProcess.vcxproj", "{145D291C-3065-42B9-BFAF-88CF77CF5433}"
 EndProject

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\JDCG\main.cpp">
+    <ClCompile Include="..\..\src\JDCG\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

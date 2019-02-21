@@ -5,10 +5,10 @@
 DROP TABLE IF EXISTS `real_terrain`;
 
 CREATE TABLE `real_terrain` (
-  `xblocksno` INT UNSIGNED NOT NULL,
-  `yblocksno` INT UNSIGNED NOT NULL,
-  `xblocksize` SMALLINT UNSIGNED NOT NULL,
-  `yblocksize` SMALLINT UNSIGNED NOT NULL,
+  `xblocksno` INT NOT NULL,
+  `yblocksno` INT NOT NULL,
+  `xblocksize` INT NOT NULL,
+  `yblocksize` INT NOT NULL,
   `zdata` MEDIUMBLOB NOT NULL)
  ENGINE=InnoDB;
 

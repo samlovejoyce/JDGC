@@ -77,18 +77,18 @@
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <TargetName>$(ProjectName)d</TargetName>
     <IntDir>..\..\temp\$(Configuration)\</IntDir>
-    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageDataProcess;D:\SharperM\JDGC\3rd;D:\SharperM\JDGC\3rd\OSGeo\gdal\include;D:\mysql-5.7.24-winx64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\SharperM\JDGC\3rd\OSGeo\gdal\lib;D:\SharperM\JDGC\lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageDataProcess;D:\SharperM\JDGC\3rd;D:\SharperM\JDGC\3rd\OSGeo\gdal\include;$(MYSQL_PATH)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\SharperM\JDGC\3rd\OSGeo\gdal\lib;D:\SharperM\JDGC\lib\$(Configuration)\;$(MYSQL_PATH)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageDataProcess;D:\SharperM\JDGC\3rd;D:\SharperM\JDGC\3rd\OSGeo\gdal\include;D:\mysql-5.7.24-winx64\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\SharperM\JDGC\include;D:\SharperM\JDGC\include\common;D:\SharperM\JDGC\include\ImageDataProcess;D:\SharperM\JDGC\3rd;D:\SharperM\JDGC\3rd\OSGeo\gdal\include;$(MYSQL_PATH)\include;$(IncludePath)</IncludePath>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <SourcePath>D:\SharperM\JDGC\src\ImageDataProcess;$(SourcePath)</SourcePath>
-    <LibraryPath>D:\SharperM\JDGC\3rd\OSGeo\gdal\lib;D:\SharperM\JDGC\lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\SharperM\JDGC\3rd\OSGeo\gdal\lib;D:\SharperM\JDGC\lib\$(Configuration)\;$(MYSQL_PATH)\lib;$(LibraryPath)</LibraryPath>
     <IntDir>..\..\temp\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -117,7 +117,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libmysqld.lib;odb.lib;odb-mysql.lib;gdal_i.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libmysql.lib;gdal_i.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\lib\$(Configuration)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -155,28 +155,25 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libmysql.lib;odb.lib;odb-mysql.lib;gdal_i.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libmysql.lib;gdal_i.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\..\lib\$(Configuration)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\ImageDataProcess\blob-traits.hxx" />
     <ClInclude Include="..\..\include\ImageDataProcess\CoordinateConvert.h" />
+    <ClInclude Include="..\..\include\ImageDataProcess\DatabaseException.h" />
     <ClInclude Include="..\..\include\ImageDataProcess\FileManeger.h" />
     <ClInclude Include="..\..\include\ImageDataProcess\ImageManager.h" />
     <ClInclude Include="..\..\include\ImageDataProcess\ImageDataProcess.h" />
-    <ClInclude Include="..\..\include\ImageDataProcess\real_terrain-odb.hxx" />
-    <ClInclude Include="..\..\include\ImageDataProcess\real_terrain.hxx" />
+    <ClInclude Include="..\..\include\ImageDataProcess\DataBaseInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ImageDataProcess\CoordinateConvert.cpp" />
+    <ClCompile Include="..\..\src\ImageDataProcess\DatabaseException.cpp" />
     <ClCompile Include="..\..\src\ImageDataProcess\FileManeger.cpp" />
     <ClCompile Include="..\..\src\ImageDataProcess\ImageManager.cpp" />
     <ClCompile Include="..\..\src\ImageDataProcess\ImageDataProcess.cpp" />
-    <ClCompile Include="..\..\src\ImageDataProcess\real_terrain-odb.cxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\include\ImageDataProcess\real_terrain-odb.ixx" />
+    <ClCompile Include="..\..\src\ImageDataProcess\DataBaseInterface.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,7 +2,7 @@
 
 #include <common/common.h>
 
-#include <odb/mysql/transaction.hxx>
+//#include <odb/mysql/transaction.hxx>
 
 namespace JDGC {
 
@@ -15,14 +15,19 @@ namespace JDGC {
 	************************************************************************************/
 	ImageManager::ImageManager()
 	{
-		_pImageProcess = new ImageProcess();
+		_pImageProcess = new ImageDataProcess();
+		
 		setImagePath("E:\\JDGC Project document\\Terrain tif\\changzhi_dsm.tif");
 
-		db = std::auto_ptr<odb::database>(new odb::mysql::database(DB_USER_NAME, DB_PASSWORD, DB_NAME));
+		_db = new DataBaseInterface(DB_HOST_NAME, DB_USER_NAME, DB_PASSWORD, DB_DATABASE_NAME);
 	}
 
 	ImageManager::~ImageManager()
 	{
+		//if (_pTerrainBlockData)
+		{
+			//delete _pTerrainBlockData;
+		}
 	}
 
 	/************************************************************************************
@@ -67,6 +72,8 @@ namespace JDGC {
 		{
 			int nBandCount = _pImageProcess->getBandCount();
 
+			if(!_db->isConnected()) _db->connect();
+
 			/** 图像波段数循环 */
 			for (int i = 0; i < nBandCount; i++)
 			{
@@ -74,78 +81,37 @@ namespace JDGC {
 
 				_pImageProcess->calculateCurBandBlocksNo(pCurBand);
 
-				float *data = nullptr;
+				
 				int xBlocksNo = _pImageProcess->getXBlocksNo();/** 当前图像波段的分块数量 */
 				int yBlocksNo = _pImageProcess->getYBlocksNo();
 
-				for (unsigned int y = 0; y < yBlocksNo; y++)
+				for (int y = 0; y < yBlocksNo; y++)
 				{
-					for (unsigned int x = 0; x < xBlocksNo; x++)
-					{
-						int xBandSize, yBandSize;
-						data = (float *)_pImageProcess->getBlockData(pCurBand, x, y, xBandSize, yBandSize);
+					for (int x = 0; x < xBlocksNo; x++)
+					{		
+						int xBandSize = 0, yBandSize = 0;
+						float *data = nullptr;
+						
+						data = _pImageProcess->getBlockData(pCurBand, x, y, xBandSize, yBandSize);
 
-						storeData(data, x, y, xBandSize, yBandSize);
+						/** 如果读取到的数据块的数据都为无效值，则不存储 */
+						bool store = false;
+						for (int index = 0; index < xBandSize * yBandSize; index++)
+						{
+							if (data[index] != 0.0)
+							{
+								store = true;
+								break;
+							}
+						}
+						if (store)
+							_db->insert(x, y, xBandSize, yBandSize, data);
+
+						_pImageProcess->releaseMemory();
 					}
-				}
+				}			
 			}
 		}
 	}
 
-	/************************************************************************************
-	* Copyright (c) 2019 All Rights Reserved.
-	* 命名空间：JDGC 
-	* 创建人  ：0XFFFFFFFF
-	* 创建时间：2019/01/30
-	* 功能描述: 数据存储到数据库中
-	************************************************************************************/
-	void ImageManager::storeData(float * pdata, int xno, int yno, int xsize, int ysize)
-	{
-		odb::transaction t(db->begin());
-
-		std::vector<float> vData;
-		for (int iY = 0; iY < ysize; iY++)
-		{
-			for (int iX = 0; iX < xsize; iX++)
-			{
-				vData.push_back(pdata[iX + iY * xsize]);
-			}
-		}
-
-		real_terrain rt(xno, yno, xsize, ysize, vData);
-		db->persist(rt);
-		t.commit();
-	}
-
-	/************************************************************************************
-	* Copyright (c) 2019 All Rights Reserved.
-	* 命名空间：JDGC
-	* 创建人  ：sharperm@163.com
-	* 创建时间：2019/01/30
-	* 功能描述: 
-	************************************************************************************/
-	std::vector<float> ImageManager::getDataBlock(float x, float y)
-	{
-		int nx, ny;
-		/** Coordinate convert:Cartesian to image  pixel*/
-		_pImageProcess->convertUTM2UV(x, y, nx, ny);
-		
-		typedef odb::query<real_terrain> query;
-		typedef odb::result<real_terrain> result;
-
-		int xblockno = nx / _pImageProcess->getCurBandXBlockSize();
-		int yblockno = ny / _pImageProcess->getCurBandYBlockSize();
-		
-		odb::transaction t(db->begin());
-		result r(db->query<real_terrain>(query::xblocksno == xblockno && query::yblocksno == yblockno));
-		if (r.size() != 0)
-			 return r.begin()->getZData();
-
-		return std::vector<float>();
-	}
-	
-	float ImageManager::getPointHeight(float x, float y)
-	{
-		return 0.0f;
-	}
 }
